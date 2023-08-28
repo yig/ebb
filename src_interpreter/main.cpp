@@ -374,7 +374,7 @@ int main(int raw_argc, char ** raw_argv) {
 
     parse_args(L,argc,argv,&terra_options,&ebboptions,&interactive,&scriptidx);
     // set some arguments by default
-    terra_options.usemcjit = 1;
+    // terra_options.usemcjit = 1;
     
     if(terra_initwithoptions(L, &terra_options))
         doerror(L);

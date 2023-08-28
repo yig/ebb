@@ -84,16 +84,20 @@ else
 endif
 endif
 
-OSX_TERRA_NAME=terra-OSX-x86_64-332a506
-OSX_TERRA_URL=https://github.com/zdevito/terra/releases/download/release-2016-03-25/$(OSX_TERRA_NAME).zip
+ifeq ($(shell uname -m),arm64)
+	OSX_TERRA_NAME=terra-OSX-arm64-be89521
+else
+	OSX_TERRA_NAME=terra-OSX-x86_64-be89521
+endif
+OSX_TERRA_URL=https://github.com/terralang/terra/releases/download/release-1.1.0/$(OSX_TERRA_NAME).tar.xz
 LINUX_TERRA_NAME=terra-Linux-x86_64-332a506
-LINUX_TERRA_URL=https://github.com/zdevito/terra/releases/download/release-2016-03-25/$(LINUX_TERRA_NAME).zip
+LINUX_TERRA_URL=https://github.com/zdevito/terra/releases/download/release-2016-03-25/$(LINUX_TERRA_NAME).tar.xz
 
 # # ----------------------------------------------------------------------- # #
 #     Interpreter
 
 DYNLIBTERRA=terra/libterra.so
-LIBTERRA=terra/lib/libterra.a
+LIBTERRA=terra/lib/libterra_s.a
 
 EXECUTABLE=ebb
 EXEC_OBJS = main.o linenoise.o
@@ -108,7 +112,7 @@ endif
 
 INTERP_LFLAGS = -g
 ifeq ($(PLATFORM),OSX)
-  INTERP_LFLAGS += -pagezero_size 10000 -image_base 100000000
+  #INTERP_LFLAGS += -pagezero_size 10000 -image_base 100000000
 endif
 ifeq ($(PLATFORM),LINUX)
   INTERP_LFLAGS += -Wl,-export-dynamic -Wl,--whole-archive $(LIBTERRA) -Wl,--no-whole-archive
@@ -136,16 +140,16 @@ all: $(ALL_DEP)
 terra:
 ifdef DOWNLOAD_TERRA
 ifeq ($(PLATFORM),LINUX)
-	wget -O $(LINUX_TERRA_NAME).zip $(LINUX_TERRA_URL)
-	unzip $(LINUX_TERRA_NAME).zip
+	wget -O $(LINUX_TERRA_NAME).tar.xz $(LINUX_TERRA_URL)
+	tar -xf $(LINUX_TERRA_NAME).tar.xz
 	mv $(LINUX_TERRA_NAME) terra
-	rm $(LINUX_TERRA_NAME).zip
+	rm $(LINUX_TERRA_NAME).tar.xz
 endif
 ifeq ($(PLATFORM),OSX)
-	wget -O $(OSX_TERRA_NAME).zip $(OSX_TERRA_URL)
-	unzip $(OSX_TERRA_NAME).zip
+	wget -O $(OSX_TERRA_NAME).tar.xz $(OSX_TERRA_URL)
+	tar -xf $(OSX_TERRA_NAME).tar.xz
 	mv $(OSX_TERRA_NAME) terra
-	rm $(OSX_TERRA_NAME).zip
+	rm $(OSX_TERRA_NAME).tar.xz
 endif
 else
 ifdef MAKE_TERRA_SYMLINK

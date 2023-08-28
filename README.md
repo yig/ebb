@@ -20,6 +20,8 @@ and Terra (dependency) will be downloaded for you.  When this process is done, y
 
 to make sure everything is working.  You should be good to go.
 
+UPDATE: On macOS, you need to run `export SDKROOT="$(xcrun --sdk macosx --show-sdk-path)"` on your shell before running any Ebb commands.
+
 
 ### Troubleshooting Quick Setup
 
